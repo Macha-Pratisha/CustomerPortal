@@ -45,7 +45,7 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       // 🌐 Fetch backend notifications first
-      const apiResponse = await axiosInstance.get('http://localhost:5000/api/notes');
+      const apiResponse = await axiosInstance.get('https://everydaynewsbackend.onrender.com/api/notes');
       const apiNotifications: Notification[] =
         apiResponse.data?.map((note: any) => ({
           id: note._id || note.id,

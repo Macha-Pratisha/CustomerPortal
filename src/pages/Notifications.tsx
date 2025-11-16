@@ -9,7 +9,7 @@ import {
   Newspaper,
   Trash2,
 } from "lucide-react";
-import axios from "axios";
+import axiosInstance from "@/lib/axios";
 import { useToast } from "@/hooks/use-toast";
 
 interface Notification {
@@ -32,7 +32,7 @@ const Notifications = () => {
   // ✅ Fetch all notifications
   const fetchNotifications = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/notes");
+      const response = await axiosInstance.get("https://everydaynewsbackend.onrender.com/api/notes");
       setNotifications(response.data);
     } catch (error) {
       toast({
@@ -48,7 +48,7 @@ const Notifications = () => {
   // ✅ Mark notification as read
   const markAsRead = async (id: string) => {
     try {
-      await axios.patch(`http://localhost:5000/api/notes/${id}/read`);
+      await axiosInstance.patch(`https://everydaynewsbackend.onrender.com/api/notes/${id}/read`);
       setNotifications((prev) => prev.filter((n) => n._id !== id));
       toast({ title: "Marked as read" });
     } catch {
@@ -63,7 +63,7 @@ const Notifications = () => {
   // ✅ Delete notification
   const deleteNotification = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:5000/api/notes/${id}`);
+      await axiosInstance.delete(`https://everydaynewsbackend.onrender.com/api/notes/${id}`);
       setNotifications((prev) => prev.filter((n) => n._id !== id));
       toast({ title: "Notification deleted" });
     } catch {
