@@ -43,8 +43,11 @@
 // export default axiosInstance;
 import axios from 'axios';
 
-// Backend URL on Render
-const BASE_URL = "https://everydaynewsbackend.onrender.com/api";
+// Use Vite environment variable if available, otherwise fallback to default
+const BASE_URL = import.meta.env.VITE_API_URL 
+  || (import.meta.env.MODE === 'development' 
+      ? 'http://localhost:5000/api'  // local dev backend
+      : 'https://everydaynewsbackend.onrender.com/api'); // production Render backend
 
 // Create axios instance
 const axiosInstance = axios.create({
@@ -58,7 +61,7 @@ const axiosInstance = axios.create({
 // Add JWT token to request headers if available
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('jwt_token');
+    const token = localStorage.getItem('jwt_token'); // change key per portal if needed
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -72,7 +75,7 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('jwt_token');
+      localStorage.removeItem('jwt_token'); // remove token
       localStorage.removeItem('user_data');
       window.location.href = '/login';
     }
@@ -81,3 +84,4 @@ axiosInstance.interceptors.response.use(
 );
 
 export default axiosInstance;
+
